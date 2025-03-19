@@ -1,20 +1,20 @@
 import Image from "next/image"
 import React from "react"
 import Navbar from "./Navbar"
+import Cards from "./common/cards"
+import ActiveUsers from "./common/ActiveUsers"
 
 const BrainStorming = () => {
   return (
     <div>
-      <Navbar></Navbar>
-
       <section className="p-6 md:p-10 bg-gray-100 min-h-screen flex flex-row items-center">
-        {/* side bar */}
+        <Cards variant="brainstorming"></Cards>
 
         {/* Container */}
-        <div className="w-full max-w-4xl bg-[#f5fbff] shadow-lg rounded-lg p-6 md:p-10">
+        <div className="w-full max-w-4xl bg-[#f5fbff] mx-auto shadow-lg rounded-lg p-6 md:p-10">
           {/* Header */}
           <div className="flex items-center gap-3">
-            <div className="p-1 bg-blue-500 text-white  text-xs rounded-full">
+            <div className="p-1 bg-[#80caff] text-slate-800  text-xs rounded-full">
               Brainstorming
             </div>
           </div>
@@ -51,6 +51,7 @@ const BrainStorming = () => {
             ))}
           </div>
         </div>
+        <ActiveUsers variant="brainstorming"></ActiveUsers>
       </section>
     </div>
   )

@@ -2,27 +2,16 @@ import React from "react"
 import Image from "next/image"
 import { caveat } from "@/pages"
 import Navbar from "./Navbar"
+import Cards from "./common/cards"
+import ActiveUsers from "./common/ActiveUsers"
 
 const Agenda = () => {
   return (
     <section>
-      <Navbar></Navbar>
       {/* <h1 className={caveat.className}>BRAINSTORM FOR NEW PROJECT IDEAS</h1> */}
       {/* lg:flex-wrap add this  */}
       <div className="bg-slate-100 p-6 flex  gap-6 ">
-        <div className="max-w-[14rem] w-full sm:w-auto bg-[#fbf7ff] p-6 rounded-lg shadow-lg">
-          <h3 className="mt-6 font-semibold text-lg">
-            Add discussion topics as a group
-          </h3>
-          <div className="flex mt-2 lg:flex-wrap">
-            <div className="bg-[#d9b8ff] text-[#9881b3] p-4 rounded-md  h-[12rem]  shadow-md  w-full sm:w-[12rem] min-w-[120px]">
-              <div className="bg-[#d9b8ff]  border-purple-500 border-2 rounded-full h-[2rem] w-[2rem] flex items-center justify-center">
-                +
-              </div>
-              Type anything, @mention anyone
-            </div>
-          </div>
-        </div>
+        <Cards variant="agenda"></Cards>
 
         <div className="max-w-4xl mx-auto bg-[#fbf7ff] p-6 rounded-lg shadow-lg w-full">
           <h1
@@ -74,24 +63,7 @@ const Agenda = () => {
           </div>
         </div>
 
-        <div className="max-w-[14rem] w-full sm:w-auto  bg-[#fbf7ff] p-6 rounded-lg shadow-lg">
-          <h3 className="mt-6 font-semibold text-lg">
-            Active user list on discussion
-          </h3>
-          <div className="flex mt-2 lg:flex-wrap">
-            <div className="bg-[#d9b8ff] text-[#9881b3] p-2 rounded-full  h-auto  shadow-md w-full sm:w-[12rem] min-w-[120px] flex items-center justify-center">
-              <div className="bg-[#d9b8ff] border-purple-500 border-2 rounded-full h-[3rem] w-[3rem] flex items-center justify-center me-2">
-                <Image
-                  className="h-[3rem] w-[3rem] rounded-full"
-                  height={48}
-                  width={48}
-                  src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
-                ></Image>
-              </div>
-              Jack Resider
-            </div>
-          </div>
-        </div>
+        <ActiveUsers variant="agenda"></ActiveUsers>
       </div>
     </section>
   )
