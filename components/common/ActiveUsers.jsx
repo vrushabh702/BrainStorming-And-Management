@@ -20,14 +20,22 @@ const ActiveUsers = ({ variant }) => {
 
   return (
     <div
-      className={`max-w-[14rem] w-full sm:w-auto  ${selectedStyle.bg} p-6 rounded-lg shadow-lg`}
+      className={`max-w-[14rem] w-full sm:w-auto  ${selectedStyle.bg} p-6 rounded-lg shadow-lg `}
     >
       <h3 className="mt-6 font-semibold text-lg">
         Active user list on discussion
       </h3>
       <div className="flex mt-2 lg:flex-wrap">
         <div
-          className={`  ${selectedStyle.bg_card}  ${selectedStyle.text} p-2 rounded-full  h-auto  shadow-md w-full sm:w-[12rem] min-w-[120px] flex items-center justify-center`}
+          draggable
+          onDragStart={(e) => {
+            e.dataTransfer.setData("text", "Jack Resider")
+            e.dataTransfer.setData(
+              "imageUrl",
+              "https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
+            )
+          }}
+          className={`  ${selectedStyle.bg_card}  ${selectedStyle.text} p-2 rounded-full  h-auto  shadow-md w-full sm:w-[12rem] min-w-[120px] flex items-center justify-center cursor-grabbing`}
         >
           <div
             className={`  ${selectedStyle.bg_card}  ${selectedStyle.border} border-2 rounded-full h-[3rem] w-[3rem] flex items-center justify-center me-2`}
@@ -36,6 +44,7 @@ const ActiveUsers = ({ variant }) => {
               className={`h-[3rem] w-[3rem] rounded-full ${selectedStyle.border} border-2`}
               height={48}
               width={48}
+              alt="User avatar"
               src="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
             ></Image>
           </div>

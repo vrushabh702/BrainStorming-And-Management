@@ -8,10 +8,12 @@ import Loading from "./common/loading"
 
 const Agenda = () => {
   const [agendaData, setAgendaData] = useState(null)
-  const [isEditing, setIsEditing] = useState(false)
   const [editableIndex, setEditableIndex] = useState(null)
   const [tempValue, setTempValue] = useState("")
-  const [whoisHereContent, setWhoIsHereContent] = useState("")
+  const [droppedUsers, setDroppedUsers] = useState([])
+  const [isDraggingOver, setIsDraggingOver] = useState(false)
+  const [users, setUsers] = useState([])
+  const [isDragging, setIsDragging] = useState(false)
 
   useEffect(() => {
     const fetchAgendaData = async () => {
@@ -19,7 +21,6 @@ const Agenda = () => {
         const response = await fetch("/api/agenda")
         const data = await response.json()
         setAgendaData(data)
-        setWhoIsHereContent(data.agenda.whoIsHere)
       } catch (error) {
         console.error("Error fetching agenda data:", error)
       }
@@ -29,10 +30,6 @@ const Agenda = () => {
 
   if (!agendaData) {
     return <Loading />
-  }
-
-  const handleWhoIsHereClick = () => {
-    setIsEditing(true)
   }
 
   const handleEditClick2 = (index, value) => {
@@ -48,34 +45,34 @@ const Agenda = () => {
     setEditableIndex(null) // Save and exit editing mode
   }
 
-  const handleInputChange = (e) => {
-    setWhoIsHereContent(e.target.innerText)
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    setIsDragging(true)
+    // setIsDraggingOver(true)
   }
 
-  const handleInputBlur = () => {
-    setIsEditing(false)
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    setIsDragging(false)
+
+    // setIsDraggingOver(false)
   }
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault()
-      const selection = window.getSelection()
+  const handleDrop = (e) => {
+    e.preventDefault()
+    setIsDragging(false)
 
-      if (!selection.rangeCount) return
+    // setIsDraggingOver(false)
 
-      const range = selection.getRangeAt(0)
+    const name = e.dataTransfer.getData("text")
+    const imageUrl = e.dataTransfer.getData("imageUrl")
 
-      const lineBreak = document.createElement("br")
-
-      range.deleteContents()
-      range.insertNode(lineBreak)
-
-      range.setStartAfter(lineBreak)
-      range.setEndAfter(lineBreak)
-
-      selection.removeAllRanges()
-      selection.addRange(range)
+    if (!users.some((user) => user.name === name)) {
+      setUsers([...users, { name, imageUrl }])
     }
+
+    // const data = JSON.parse(e.dataTransfer.getData("text/plain"))
+    // setDroppedUsers([...droppedUsers, data])
   }
 
   return (
@@ -83,7 +80,7 @@ const Agenda = () => {
       {/* <h1 className={caveat.className}>BRAINSTORM FOR NEW PROJECT IDEAS</h1> */}
       {/* lg:flex-wrap add this  */}
       <div className="bg-slate-100 p-6 flex  gap-6 ">
-        <Cards variant="agenda"></Cards>
+        <Cards variant={agendaData.variant}></Cards>
 
         <div className="max-w-4xl mx-auto bg-[#fbf7ff] p-6 rounded-lg shadow-lg w-full">
           <h1
@@ -99,27 +96,41 @@ const Agenda = () => {
 
           <div className="flex flex-col md:flex-row gap-4 mt-4">
             <div
-              className="flex-1 bg-[#efe3ff] p-4 border-2 border-[#9747ff] min-h-[16rem] w-full md:w-1/4 rounded-lg shadow-md cursor-pointer"
-              onClick={handleWhoIsHereClick}
+              className={`flex-1 bg-[#efe3ff] p-4 border-2 border-dashed ${
+                isDragging ? "border-[#9747ff]" : "border-[#9747ff]/50"
+              }  min-h-[16rem] w-full md:w-1/4 rounded-lg shadow-md cursor-pointer transition-colors duration-200 
+              
+              `}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
             >
               <h2 className={`text-lg font-semibold ${caveat.className}`}>
                 {agendaData.agenda.whoIsHere}
                 <br></br>
-                {isEditing ? (
-                  <div
-                    contentEditable
-                    suppressContentEditableWarning
-                    onInput={handleInputChange}
-                    onBlur={handleInputBlur}
-                    onKeyDown={handleKeyDown}
-                    className="w-full min-h-[14rem] overflow-hidden resize-none border-none p-2"
-                    // dangerouslySetInnerHTML={{ __html: whoisHereContent }}
-                    value={whoisHereContent}
-                  />
-                ) : (
-                  [whoisHereContent]
-                )}
               </h2>
+
+              <div className="mt-4 flex flex-wrap gap-3">
+                {users.map((user, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 bg-[#d9b8ff] px-3 py-1 rounded-full"
+                  >
+                    <div className="relative h-8 w-8">
+                      <Image
+                        src={user.imageUrl}
+                        alt={user.name}
+                        fill
+                        // height={8}
+                        // width={8}
+                        className="rounded  full border-2 border-[#9747ff] object-cover"
+                        draggable={false}
+                      />
+                    </div>
+                    <span className="text-sm text-[#9747ff]">{user.name}</span>
+                  </div>
+                ))}
+              </div>
               {/* <img
                 src="https://via.placeholder.com/100"
                 alt="Stamp Your Face"
